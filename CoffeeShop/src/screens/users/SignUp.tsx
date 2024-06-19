@@ -1,27 +1,51 @@
-import { View, Text, Dimensions, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
 import { container } from '../../components/styles/screens';
 import { COLORS, FONTFAMILY, FONTSIZE } from '../../theme/theme';
 import InputForm from '../../components/InputForm';
+import AxiosInstance from '../../../helper/AxiosInstance';
+import { useSelector } from 'react-redux';
+import { selectHost } from '../../../helper/redux/globalSlice';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { ParamList } from '../../navigator/Naviagtion';
+import { AccountFunction } from '../../../utils/accountFunction';
 
-const {width, height} = Dimensions.get('window');
-
+const { width } = Dimensions.get('window');
 
 const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const host = useSelector(selectHost);
+  const utils = new AccountFunction();
+  const navigation = useNavigation<NavigationProp<ParamList, 'Login'>>();
+
+  const register = async () => {
+    try {
+      if (email.length === 0 || password.length === 0) {
+        throw new Error('Please input all the fields required');
+      }
+
+      if(!utils.checkEmail(email)){
+        throw new Error("Please input a valid email");
+      }
+
+
+      const data: UserBase = { email, password };
+      const response = await AxiosInstance().post(`${host}/user/register`, data);
+      console.log("Sign up Response:",response);
+
+      if(response.status)
+      navigation.navigate("Sign In");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
-    <View
-      style={[
-        container.container,
-        {backgroundColor: COLORS.primaryBlackHex, alignItems: 'stretch'},
-      ]}>
+    <View style={[container.container, { backgroundColor: COLORS.primaryBlackHex }]}>
       <InputForm
         value={email}
-        onChangeText={text => {
-          setEmail(text);
-        }}
+        onChangeText={(text) => setEmail(text)}
         styles={{
           marginTop: 50,
           marginBottom: 20,
@@ -31,9 +55,7 @@ const SignUp = () => {
 
       <InputForm
         value={password}
-        onChangeText={text => {
-          setPassword(text);
-        }}
+        onChangeText={(text) => setPassword(text)}
         placeholder="Password"
       />
 
@@ -47,18 +69,21 @@ const SignUp = () => {
           paddingVertical: 10,
           borderRadius: 15,
           backgroundColor: COLORS.primaryOrangeHex,
-        }}>
+        }}
+        onPress={register}
+      >
         <Text
           style={{
             fontFamily: FONTFAMILY.poppins_extrabold,
             fontSize: FONTSIZE.size_18,
-            color: COLORS.primaryWhiteHex
-          }}>
-          Sign Up
+            color: COLORS.primaryWhiteHex,
+          }}
+        >
+          Register
         </Text>
       </TouchableOpacity>
     </View>
   );
-}
+};
 
-export default SignUp
+export default SignUp;

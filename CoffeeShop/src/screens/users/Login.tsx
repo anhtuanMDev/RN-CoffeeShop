@@ -38,7 +38,7 @@ const Login = () => {
         }
       }}>
         <Tab.Screen name="Sign In" component={SignIn} />
-        <Tab.Screen name="Sign Up" component={SignUp} />
+        <Tab.Screen name="Register" component={SignUp} />
       </Tab.Navigator>
     </View>
   );

@@ -1,4 +1,4 @@
-import {View, Text, Image, Dimensions, TouchableOpacity} from 'react-native';
+import {View, Text, Image, Dimensions, TouchableOpacity, StatusBar} from 'react-native';
 import React from 'react';
 import {container} from '../../components/styles/screens';
 import {COLORS} from '../../theme/theme';
@@ -11,6 +11,7 @@ const Welcome = () => {
     const navigate = useNavigation<NavigationProp<ParamList, 'Welcome'>>();
   return (
     <View style={[container.flexAll]}>
+      <StatusBar backgroundColor={'transparent'} translucent/>
       <Image
         source={require('../../assets/app_images/wallpaper.jpg')}
         style={{width, height: height / 1.3}}

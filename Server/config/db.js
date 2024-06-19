@@ -3,7 +3,7 @@ const mongoose =  require('mongoose');
 var express = require('express');
 const app = express();
 
-const uri = "mongodb://localhost:27017";
+const uri = "mongodb://localhost:27017/coffee";
 
 mongoose.set('strictQuery', false);
 
