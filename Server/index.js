@@ -6,7 +6,7 @@ const accountUtils = require('./utils/account');
 const express = require('express');
 const app = express();
 const port = 2101;
-const ip = "192.168.1.5";
+const ip = "192.168.1.3";
 
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());

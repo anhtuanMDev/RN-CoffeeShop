@@ -7,8 +7,9 @@ import AxiosInstance from '../../../helper/AxiosInstance';
 import { useSelector } from 'react-redux';
 import { selectHost } from '../../../helper/redux/globalSlice';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { ParamList } from '../../navigator/Naviagtion';
 import { AccountFunction } from '../../../utils/accountFunction';
+import { ParamList } from '../../models/fileParam';
+import { Response } from '../../models/response';
 
 const { width } = Dimensions.get('window');
 
@@ -16,30 +17,9 @@ const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const host = useSelector(selectHost);
-  const utils = new AccountFunction();
+  const utils = new AccountFunction(host);
   const navigation = useNavigation<NavigationProp<ParamList, 'Login'>>();
 
-  const register = async () => {
-    try {
-      if (email.length === 0 || password.length === 0) {
-        throw new Error('Please input all the fields required');
-      }
-
-      if(!utils.checkEmail(email)){
-        throw new Error("Please input a valid email");
-      }
-
-
-      const data: UserBase = { email, password };
-      const response = await AxiosInstance().post(`${host}/user/register`, data);
-      console.log("Sign up Response:",response);
-
-      if(response.status)
-      navigation.navigate("Sign In");
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <View style={[container.container, { backgroundColor: COLORS.primaryBlackHex }]}>
@@ -70,7 +50,12 @@ const SignUp = () => {
           borderRadius: 15,
           backgroundColor: COLORS.primaryOrangeHex,
         }}
-        onPress={register}
+        onPress={async()=>{
+          const api: Response = await utils.register(email,password);
+          if(api?.status && api != null) {
+            navigation.navigate("Sign In");
+          }
+        }}
       >
         <Text
           style={{

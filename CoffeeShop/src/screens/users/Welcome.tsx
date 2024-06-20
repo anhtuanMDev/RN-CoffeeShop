@@ -1,14 +1,31 @@
 import {View, Text, Image, Dimensions, TouchableOpacity, StatusBar} from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {container} from '../../components/styles/screens';
 import {COLORS} from '../../theme/theme';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { ParamList } from '../../navigator/Naviagtion';
+import { ParamList } from '../../models/fileParam';
+import { useSelector } from 'react-redux';
+import { selectHost } from '../../../helper/redux/globalSlice';
+import { AccountFunction } from '../../../utils/accountFunction';
 
 const {width, height} = Dimensions.get('window');
 
 const Welcome = () => {
     const navigate = useNavigation<NavigationProp<ParamList, 'Welcome'>>();
+    const host = useSelector(selectHost);
+    const utils = new AccountFunction(host);
+
+    useEffect(()=>{
+      const getLogin = async() => {
+        const check = await utils.getLoginState();
+        if(check){
+          navigate.navigate('Home');
+        }
+      }
+
+      getLogin();
+    },[]);
+
   return (
     <View style={[container.flexAll]}>
       <StatusBar backgroundColor={'transparent'} translucent/>

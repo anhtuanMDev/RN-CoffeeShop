@@ -2,11 +2,11 @@ import {View, Text, TouchableOpacity, Dimensions, Image} from 'react-native';
 import React from 'react';
 import {COLORS} from '../../theme/theme';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {ParamList} from '../../navigator/Naviagtion';
 import {container} from '../../components/styles/screens';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
+import { ParamList } from '../../models/fileParam';
 
 const Tab = createMaterialTopTabNavigator();
 const {width, height} = Dimensions.get('window');
